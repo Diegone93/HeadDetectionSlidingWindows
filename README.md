@@ -1,1 +1,1 @@
-# HeadDetectionSlidingWindows
+# headDetectorSlidingWindows
