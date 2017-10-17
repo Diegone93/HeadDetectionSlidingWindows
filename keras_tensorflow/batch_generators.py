@@ -8,10 +8,9 @@ import random
 random.seed(1769)
 DataValidationFolder =['01']
 
-
 def load_names(val_seq = -1, augm=0):
 
-    gt_dir = 'D:\Diego\FaceExtraction\Extraction\\'
+    gt_dir = 'C:\\Users\Diego\Desktop\FaceExtraction\Extraction\\'
     if val_seq < 0:
         # load all and remove validation sequence
         gt_list = os.listdir(gt_dir)
@@ -129,7 +128,7 @@ def load_images(train_data_names, crop, scale, rescale, normcv2, b_debug,fulldep
         img = cv2.imread(img_name, cv2.IMREAD_ANYDEPTH)
 
         if removeBackground:
-            center = np.mean(img[img.shape[0] / 2 - 1:img.shape[0] / 2 + 2, img.shape[1] / 2 - 1:img.shape[1] / 2 + 2])
+            center = np.mean(img[int(img.shape[0] / 2 - 1):int(img.shape[0] / 2 + 2), int(img.shape[1] / 2 - 1):int(img.shape[1] / 2 + 2)])
             img[img > center + 150] = 0
 
         if fulldepth:
@@ -162,7 +161,7 @@ def load_images(train_data_names, crop, scale, rescale, normcv2, b_debug,fulldep
 
         # Normalize (openCV)
         if normcv2:
-            img = cv2.normalize(img.astype('float'), alpha=-1.0, beta=1.0, norm_type=cv2.NORM_MINMAX)
+            cv2.normalize(img.astype('float'), img, alpha=-1.0, beta=1.0, norm_type=cv2.NORM_MINMAX)
 
         # resize
         img = cv2.resize(img, (cols, rows))

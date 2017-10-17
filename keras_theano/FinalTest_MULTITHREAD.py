@@ -13,7 +13,7 @@ else:
 print("Argument: gpu={}".format(gpu_id))
 os.environ["THEANO_FLAGS"] = "device=" + gpu_id + ", lib.cnmem=" + cnmem
 
-from models import faceNet2,faceNet3
+from models import faceNet2
 import numpy as np
 import cv2
 import warnings
@@ -138,9 +138,9 @@ def getWindows(img,kernel_dim=11):
     # X -> [1] Y -> [0]
 
     for i, w in enumerate(centers):
+
         # crop bounding box
         im = img[w[0] - (w[2]/2):w[0] + (w[2]/2) + 1, w[1] - w[2]/2:w[1] + (w[2]/2) + 1].copy()
-
         # remove background
         head_size = 250
         im[im > (w[3] + head_size)] = 0
@@ -148,10 +148,10 @@ def getWindows(img,kernel_dim=11):
         im = cv2.normalize(im.astype('float'), alpha=-1.0, beta=1.0, norm_type=cv2.NORM_MINMAX)
 
         im = cv2.resize(im, (64, 64))
+
         im = np.expand_dims(im, 2)
         im = im.astype(np.float32)
         windows[i, :, :] = (im.transpose(2, 0, 1))
-
     return centers,windows
 
 def prediction(filename,model,skel,imgnum,detection,localization,save=False,show=True):
@@ -195,6 +195,7 @@ def prediction(filename,model,skel,imgnum,detection,localization,save=False,show
     centers, win = getWindows(img)
     # prediction
     pred = model.predict(x=win, batch_size=batch_size, verbose=0)
+
     max = np.argmax(pred[:, 0])
     t = time.time() - t
 
@@ -272,11 +273,11 @@ if __name__ == '__main__':
 
     # model
     model = faceNet2(rows, cols)
-    #model = faceNet3(rows,cols)
     # weights
     print("Load weights ...")
-    model.load_weights('weights_5_16bit\weights.013-0.03280.hdf5')
+    model.load_weights('weights_5_16bit\weights_theano_tensorflow.hdf5')
     print("Done.")
+
     soggettitest = ['01', '15']
 
     trials = ['data_01-05-11',

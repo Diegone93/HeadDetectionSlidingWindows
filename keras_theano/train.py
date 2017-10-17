@@ -12,7 +12,7 @@ else:
 print("Argument: gpu={}".format(gpu_id))
 os.environ["THEANO_FLAGS"] = "device=" + gpu_id + ", lib.cnmem=" + cnmem
 
-from models import faceNet2, faceNet3
+from models import faceNet2
 from batch_generators import load_names, load_images, load_names_val
 from keras.optimizers import Adam
 
@@ -70,10 +70,10 @@ if __name__ == '__main__':
     b_scale = False
     b_normcv2 = True
     b_tanh = True
-    #limit_train = 150000
-    limit_train = -1
-    #limit_test = 15000
-    limit_test = -1
+    limit_train = 1
+    #limit_train = -1
+    limit_test = 10
+    #limit_test = -1
     b_debug = False
     fulldepth = False
     removeBackground = True
@@ -132,5 +132,5 @@ if __name__ == '__main__':
                         nb_val_samples=len(val_data_names),
                         samples_per_epoch=len(train_data_names),
                         callbacks=[his,EarlyStopping(patience=patience),
-                        ModelCheckpoint("weights_5_tuning/weights.{epoch:03d}-{val_loss:.5f}.hdf5", save_best_only=True)]
+                        ModelCheckpoint("weights_5_16bit/weights.{epoch:03d}-{val_loss:.5f}.hdf5", save_best_only=True)]
                         )
